@@ -1,4 +1,4 @@
-class CartController < ApplicationController
+class CartsController < ApplicationController
   def show
     cart = session[:cart] || {}
     @items = cart.filter_map { |id, qty| p = Product.find_by(id: id); p ? { product: p, quantity: qty } : nil }

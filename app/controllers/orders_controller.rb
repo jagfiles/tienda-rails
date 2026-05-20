@@ -17,7 +17,7 @@ class OrdersController < ApplicationController
     @cart = session[:cart] || {}
     return redirect_to products_path, alert: "Tu carrito está vacío." if @cart.empty?
 
-    @order = current_user.orders.build(order_params.merge(status: :pending))
+    @order = current_user.orders.build(order_params.merge(status: :pending, total: 0))
 
     ActiveRecord::Base.transaction do
       @order.save!

@@ -8,8 +8,6 @@ class Order < ApplicationRecord
   validates :shipping_address, presence: true
   validates :total, numericality: { greater_than_or_equal_to: 0 }
 
-  before_save :calculate_total
-
   def calculate_total
     self.total = order_items.sum(&:subtotal)
   end
