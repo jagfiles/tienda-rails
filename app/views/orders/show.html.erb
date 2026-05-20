@@ -1,0 +1,34 @@
+<div class="max-w-xl mx-auto px-4 py-8">
+  <%= link_to "← Mis pedidos", orders_path, class: "text-gray-500 hover:text-indigo-600 text-sm block mb-6" %>
+  <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+      <div>
+        <h1 class="text-xl font-bold">Pedido #<%= @order.id %></h1>
+        <p class="text-sm text-gray-500"><%= @order.created_at.strftime("%-d de %B, %Y") %></p>
+      </div>
+      <span class="bg-indigo-100 text-indigo-700 text-sm px-3 py-1 rounded-full"><%= @order.status.humanize %></span>
+    </div>
+    <div class="divide-y divide-gray-100">
+      <% @order.order_items.includes(:product).each do |item| %>
+        <div class="flex justify-between items-center p-4 text-sm">
+          <div>
+            <p class="font-medium"><%= item.product.name %></p>
+            <p class="text-gray-500"><%= item.quantity %> × $<%= number_with_delimiter(item.unit_price) %></p>
+          </div>
+          <span class="font-semibold">$<%= number_with_delimiter(item.subtotal) %></span>
+        </div>
+      <% end %>
+    </div>
+    <div class="p-6 bg-gray-50 border-t border-gray-100">
+      <div class="flex justify-between font-bold text-lg">
+        <span>Total</span>
+        <span class="text-indigo-600">$<%= number_with_delimiter(@order.total) %></span>
+      </div>
+      <% if @order.can_cancel? %>
+        <%= button_to "Cancelar pedido", cancel_order_path(@order), method: :patch,
+            class: "w-full mt-4 bg-red-50 text-red-600 border border-red-200 py-2 rounded-lg text-sm hover:bg-red-100",
+            data: { turbo_confirm: "¿Cancelar este pedido?" } %>
+      <% end %>
+    </div>
+  </div>
+</div>

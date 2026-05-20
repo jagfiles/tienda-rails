@@ -1,0 +1,35 @@
+<div class="max-w-2xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-6">Tu carrito</h1>
+  <% if @items.any? %>
+    <div class="bg-white rounded-xl border border-gray-200 mb-6 overflow-hidden">
+      <% @items.each do |item| %>
+        <div class="flex items-center gap-4 p-4 border-b border-gray-100 last:border-0">
+          <div class="flex-1">
+            <p class="font-medium"><%= item[:product].name %></p>
+            <p class="text-sm text-gray-500">Cantidad: <%= item[:quantity] %></p>
+          </div>
+          <span class="font-semibold">$<%= number_with_delimiter(item[:product].price * item[:quantity]) %></span>
+          <%= button_to "✕", remove_cart_path(product_id: item[:product].id), method: :delete, class: "ml-2 text-gray-400 hover:text-red-500 text-sm" %>
+        </div>
+      <% end %>
+    </div>
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-4 flex justify-between font-bold text-lg">
+      <span>Total</span>
+      <span class="text-indigo-600">$<%= number_with_delimiter(@total) %></span>
+    </div>
+    <div class="flex gap-3">
+      <%= button_to "Vaciar", clear_cart_path, method: :delete, class: "px-4 py-2 border border-gray-300 rounded-xl text-sm text-gray-700 hover:bg-gray-50" %>
+      <% if user_signed_in? %>
+        <%= link_to "Finalizar compra →", new_order_path, class: "flex-1 bg-indigo-600 text-white text-center py-3 rounded-xl font-semibold hover:bg-indigo-700" %>
+      <% else %>
+        <%= link_to "Iniciá sesión para comprar", new_user_session_path, class: "flex-1 bg-indigo-600 text-white text-center py-3 rounded-xl font-semibold hover:bg-indigo-700" %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-16">
+      <p class="text-5xl mb-4">🛒</p>
+      <p class="text-gray-600 mb-4">Tu carrito está vacío</p>
+      <%= link_to "Ver productos", products_path, class: "bg-indigo-600 text-white px-6 py-2 rounded-xl text-sm font-medium hover:bg-indigo-700" %>
+    </div>
+  <% end %>
+</div>

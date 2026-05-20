@@ -1,0 +1,50 @@
+<section class="bg-gradient-to-br from-indigo-600 to-indigo-800 text-white py-20">
+  <div class="max-w-7xl mx-auto px-4 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">Tu tienda favorita</h1>
+    <p class="text-indigo-200 text-lg mb-8">Los mejores productos al mejor precio.</p>
+    <%= link_to "Ver productos", products_path, class: "bg-white text-indigo-700 font-semibold px-8 py-3 rounded-xl hover:bg-indigo-50 inline-block" %>
+  </div>
+</section>
+
+<% if @categories.any? %>
+  <section class="max-w-7xl mx-auto px-4 py-12">
+    <h2 class="text-2xl font-bold mb-6">Categorías</h2>
+    <div class="grid grid-cols-3 md:grid-cols-6 gap-4">
+      <% @categories.each do |cat| %>
+        <%= link_to products_path(category: cat.slug), class: "bg-white rounded-xl p-4 text-center border border-gray-200 hover:border-indigo-400 hover:shadow-md transition-all" do %>
+          <div class="w-10 h-10 bg-indigo-100 rounded-xl mx-auto mb-2 flex items-center justify-center">
+            <span class="text-indigo-600 font-bold"><%= cat.name.first.upcase %></span>
+          </div>
+          <p class="text-xs font-medium text-gray-700"><%= cat.name %></p>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+<% end %>
+
+<% if @featured_products.any? %>
+  <section class="max-w-7xl mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold">Destacados</h2>
+      <%= link_to "Ver todos →", products_path, class: "text-indigo-600 text-sm font-medium" %>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <% @featured_products.each do |p| %>
+        <%= link_to product_path(p), class: "bg-white rounded-xl border border-gray-200 hover:shadow-lg transition-all overflow-hidden" do %>
+          <div class="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+            <span class="text-4xl text-gray-300">🛍️</span>
+          </div>
+          <div class="p-4">
+            <p class="text-xs text-indigo-600 mb-1"><%= p.category.name %></p>
+            <p class="text-sm font-semibold text-gray-900 line-clamp-2"><%= p.name %></p>
+            <p class="text-lg font-bold mt-1">$<%= number_with_delimiter(p.price) %></p>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+<% else %>
+  <div class="text-center py-20 text-gray-400">
+    <p>Ejecutá <code class="bg-gray-100 text-gray-600 px-2 py-1 rounded">rails db:seed</code> para cargar productos de ejemplo.</p>
+  </div>
+<% end %>

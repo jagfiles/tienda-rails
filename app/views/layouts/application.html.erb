@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>TiendaRails</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
+
+    <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center gap-8">
+            <%= link_to root_path, class: "flex items-center gap-2" do %>
+              <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+                <span class="text-white font-bold text-sm">T</span>
+              </div>
+              <span class="font-semibold text-lg">TiendaRails</span>
+            <% end %>
+            <%= link_to "Productos", products_path, class: "hidden md:block text-gray-600 hover:text-indigo-600 text-sm font-medium" %>
+          </div>
+          <div class="flex items-center gap-4">
+            <%= link_to cart_path, class: "relative p-2 text-gray-600 hover:text-indigo-600" do %>
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-9H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+              <% count = (session[:cart] || {}).values.sum(&:to_i) %>
+              <% if count > 0 %>
+                <span class="absolute -top-1 -right-1 bg-indigo-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"><%= count %></span>
+              <% end %>
+            <% end %>
+            <% if user_signed_in? %>
+              <%= link_to "Mis pedidos", orders_path, class: "hidden md:block text-sm text-gray-600 hover:text-indigo-600 font-medium" %>
+              <%= button_to "Salir", destroy_user_session_path, method: :delete, class: "text-sm text-red-600 hover:text-red-700 font-medium" %>
+            <% else %>
+              <%= link_to "Iniciar sesión", new_user_session_path, class: "text-sm text-gray-600 hover:text-indigo-600 font-medium" %>
+              <%= link_to "Registrarse", new_user_registration_path, class: "bg-indigo-600 text-white text-sm px-4 py-2 rounded-lg hover:bg-indigo-700 font-medium" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 w-full">
+      <% flash.each do |type, msg| %>
+        <% color = type == "notice" ? "green" : "red" %>
+        <div class="mb-4 p-4 rounded-xl bg-<%= color %>-50 border border-<%= color %>-200 text-<%= color %>-800 text-sm"><%= msg %></div>
+      <% end %>
+    </div>
+
+    <main class="flex-1"><%= yield %></main>
+
+    <footer class="bg-white border-t border-gray-200 mt-16">
+      <div class="max-w-7xl mx-auto px-4 py-6 text-center text-xs text-gray-400">
+        TiendaRails &copy; <%= Date.current.year %> — Rails 8 + Tailwind + PostgreSQL
+      </div>
+    </footer>
+
+  </body>
+</html>

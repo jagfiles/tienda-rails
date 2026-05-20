@@ -1,0 +1,25 @@
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <nav class="text-sm mb-6 text-gray-500">
+    <%= link_to "Inicio", root_path, class: "hover:text-indigo-600" %> /
+    <%= link_to "Productos", products_path, class: "hover:text-indigo-600" %> /
+    <span class="text-gray-900"><%= @product.name %></span>
+  </nav>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+    <div class="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center">
+      <span class="text-8xl text-gray-300">🛍️</span>
+    </div>
+    <div>
+      <span class="inline-block bg-indigo-100 text-indigo-700 text-xs px-3 py-1 rounded-full mb-4"><%= @product.category.name %></span>
+      <h1 class="text-3xl font-bold mb-4"><%= @product.name %></h1>
+      <div class="text-3xl font-bold text-indigo-600 mb-6">$<%= number_with_delimiter(@product.price) %></div>
+      <p class="text-gray-600 mb-6"><%= @product.description %></p>
+      <% if @product.available? %>
+        <p class="text-green-600 text-sm mb-4">✓ En stock (<%= @product.stock %> disponibles)</p>
+        <%= button_to "Agregar al carrito", add_cart_path(product_id: @product.id), method: :post,
+            class: "w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700" %>
+      <% else %>
+        <p class="text-red-500 text-sm">Sin stock disponible</p>
+      <% end %>
+    </div>
+  </div>
+</div>
